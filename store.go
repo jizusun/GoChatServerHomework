@@ -9,11 +9,15 @@ type Message struct {
 
 type Username = string
 
+type MessageList struct {
+	Messages []*Message `json:"messages"`
+}
+
 // Store the response of reading messages
 type Store struct {
-	Utils    ExternalInterface
-	Messages []*Message `json:"messages"`
-	Users    map[Username]bool
+	MessageList
+	Utils ExternalInterface
+	Users map[Username]bool
 }
 
 func (s *Store) AddMessage(m *Message) *Message {

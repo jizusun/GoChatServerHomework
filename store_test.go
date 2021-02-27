@@ -37,7 +37,10 @@ func TestStore_AddMessage_GetUsers(t *testing.T) {
 		Text: "hello",
 	})
 	actualUsers := s.GetUsers()
-	assert.Equal(t, []Username{"superman", "batman"}, actualUsers)
+
+	assert.Equal(t, len(actualUsers), 2)
+	assert.Contains(t, actualUsers, "superman")
+	assert.Contains(t, actualUsers, "batman")
 }
 
 func TestStore_GetMessages(t *testing.T) {
@@ -53,9 +56,11 @@ func TestStore_GetMessages(t *testing.T) {
 		messages = append(messages, m)
 	}
 	s := Store{
-		Utils:    FakeExternal{},
-		Users:    make(map[Username]bool),
-		Messages: messages,
+		Utils: FakeExternal{},
+		Users: make(map[Username]bool),
+		MessageList: MessageList{
+			Messages: messages,
+		},
 	}
 	actual := s.GetMessages()
 	lastMessage := messages[size-1]
