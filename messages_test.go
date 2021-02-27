@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/andreyvit/diff"
+	"github.com/stretchr/testify/assert"
 )
 
 // MessageReadHandler
@@ -15,10 +15,6 @@ import (
 // `POST message` MessageCreateHandler
 // should return indented {"ok": true}
 // should record a unix timestamp with each message
-
-func createMessage() {
-
-}
 
 func TestMessageCreateHandler(t *testing.T) {
 	jsonStr := []byte(`{"user":"superman", "text":"hello"}`)
@@ -35,8 +31,6 @@ func TestMessageCreateHandler(t *testing.T) {
 `
 	actual := rr.Body.String()
 	if actual != expected {
-		t.Errorf("Result not as expected:\n%v", diff.LineDiff(expected, actual))
-		// t.Errorf("handler returned unexpected body: got %v want %v",
-		// 	rr.Body.String(), expected)
+		assert.Equal(t, actual, expected)
 	}
 }
