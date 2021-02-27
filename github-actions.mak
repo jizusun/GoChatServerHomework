@@ -59,6 +59,7 @@ build-snapshot: ## goreleaser --snapshot --skip-publish --rm-dist
 .PHONY: diff
 diff: ## git diff
 	$(call print-target)
+	git config core.autocrlf false
 	git diff --exit-code
 	RES=$$(git status --porcelain) ; if [ -n "$$RES" ]; then echo $$RES && exit 1 ; fi
 
