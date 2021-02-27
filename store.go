@@ -17,13 +17,11 @@ type MessageList struct {
 type Store struct {
 	MessageList
 	Utils UtilitiesInterface
-	Users map[Username]bool
 }
 
 func (s *Store) AddMessage(m *Message) *Message {
 	m.Timestamp = s.Utils.GetTimestamp()
 	s.Messages = append(s.Messages, m)
-	s.Users[m.User] = true
 	return m
 }
 
@@ -33,9 +31,15 @@ func (s *Store) GetMessages() []*Message {
 }
 
 func (s *Store) GetUsers() []Username {
-	users := make([]Username, 0, len(s.Users))
-	for u := range s.Users {
-		users = append(users, u)
+	users := make([]Username, 0)
+	usersmap := make(map[Username]bool)
+	for _, m := range s.Messages {
+		username := m.User
+		_, ok := usersmap[username]
+		if !ok {
+			usersmap[username] = true
+			users = append(users, username)
+		}
 	}
 	return users
 }

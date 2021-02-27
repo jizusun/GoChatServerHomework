@@ -19,7 +19,6 @@ import (
 func TestMessageCreateHandler(t *testing.T) {
 	store := &Store{
 		Utils: Utilities{},
-		Users: make(map[string]bool),
 	}
 	jsonStr := []byte(`{"user":"superman", "text":"hello"}`)
 	req, _ := http.NewRequest("POST", "/message", bytes.NewBuffer(jsonStr))
@@ -49,7 +48,6 @@ func TestMessageReadHandler(t *testing.T) {
 	}
 	store := &Store{
 		Utils: Utilities{},
-		Users: make(map[string]bool),
 		MessageList: MessageList{
 			Messages: []*Message{&message1, &message2},
 		},
@@ -80,8 +78,21 @@ func TestMessageReadHandler(t *testing.T) {
 }
 
 func TestGetUserHandler(t *testing.T) {
+	message1 := Message{
+		User:      "superman",
+		Text:      "hello",
+		Timestamp: int64(1491345710),
+	}
+	message2 := Message{
+		User:      "batman",
+		Text:      "hello",
+		Timestamp: int64(1491345713),
+	}
 	store := &Store{
-		Users: map[string]bool{"superman": true, "batman": true},
+		Utils: Utilities{},
+		MessageList: MessageList{
+			Messages: []*Message{&message1, &message2},
+		},
 	}
 	req, _ := http.NewRequest("GET", "/users", nil)
 	rec := httptest.NewRecorder()

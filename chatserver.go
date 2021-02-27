@@ -8,7 +8,6 @@ import (
 func main() {
 	store := &Store{
 		Utils: Utilities{},
-		Users: make(map[string]bool),
 	}
 	http.HandleFunc("/message", CreateMessageHandler(store))
 	http.HandleFunc("/messages", ReadMessageHandler(store))

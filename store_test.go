@@ -16,7 +16,6 @@ func (ex FakeUtilities) GetTimestamp() int64 {
 func TestStore_AddMessage_GetUsers(t *testing.T) {
 	s := Store{
 		Utils: FakeUtilities{},
-		Users: make(map[Username]bool),
 	}
 	m := &Message{
 		User: "superman",
@@ -36,11 +35,13 @@ func TestStore_AddMessage_GetUsers(t *testing.T) {
 		User: "batman",
 		Text: "hello",
 	})
+	s.AddMessage(&Message{
+		User: "batman",
+		Text: "hello world",
+	})
 	actualUsers := s.GetUsers()
 
-	assert.Equal(t, len(actualUsers), 2)
-	assert.Contains(t, actualUsers, "superman")
-	assert.Contains(t, actualUsers, "batman")
+	assert.Equal(t, actualUsers, []Username{"superman", "batman"})
 }
 
 func TestStore_GetMessages(t *testing.T) {
@@ -57,7 +58,6 @@ func TestStore_GetMessages(t *testing.T) {
 	}
 	s := Store{
 		Utils: FakeUtilities{},
-		Users: make(map[Username]bool),
 		MessageList: MessageList{
 			Messages: messages,
 		},
