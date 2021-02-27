@@ -6,7 +6,6 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/andreyvit/diff"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -71,8 +70,20 @@ func TestMessageReadHandler(t *testing.T) {
   ]
 }
 `
-	if expectedReadRes != actualReadRes {
-		diff.LineDiff(expectedReadRes, actualReadRes)
-	}
 	assert.Equal(t, expectedReadRes, actualReadRes)
+}
+
+func TestStatusHandler(t *testing.T) {
+	req, err := http.NewRequest("GET", "/status", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(StatusHandler)
+	handler.ServeHTTP(rr, req)
+	expected := "alive"
+	if rr.Body.String() != expected {
+		t.Errorf("handler returned unexpected body: got %v want %v",
+			rr.Body.String(), expected)
+	}
 }

@@ -2,9 +2,9 @@ package main
 
 // Message the message is processed by the server a unix timestamp is recorded with each message.
 type Message struct {
+	Timestamp int64    `json:"timestamp"`
 	User      Username `json:"user"`
 	Text      string   `json:"text"`
-	Timestamp int64    `json:"timestamp"`
 }
 
 type Username = string

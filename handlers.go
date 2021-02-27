@@ -47,3 +47,8 @@ func CreateMessageHandler(s *Store) http.HandlerFunc {
 		CreateMessage(w, r, s)
 	}
 }
+
+// StatusHandler test
+func StatusHandler(c http.ResponseWriter, req *http.Request) {
+	c.Write([]byte("alive"))
+}
