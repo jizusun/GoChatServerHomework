@@ -4,7 +4,7 @@ package main
 type Message struct {
 	User      Username `json:"user"`
 	Text      string   `json:"text"`
-	Timestamp int64
+	Timestamp int64    `json:"timestamp"`
 }
 
 type Username = string
