@@ -4,12 +4,12 @@ import (
 	"time"
 )
 
-type ExternalInterface interface {
+type UtilitiesInterface interface {
 	GetTimestamp() int64
 }
 
-type External struct{}
+type Utilities struct{}
 
-func (ex External) GetTimestamp() int64 {
+func (ex Utilities) GetTimestamp() int64 {
 	return time.Now().Unix()
 }

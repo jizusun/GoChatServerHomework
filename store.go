@@ -16,7 +16,7 @@ type MessageList struct {
 // Store the response of reading messages
 type Store struct {
 	MessageList
-	Utils ExternalInterface
+	Utils UtilitiesInterface
 	Users map[Username]bool
 }
 

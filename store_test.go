@@ -7,15 +7,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type FakeExternal struct{}
+type FakeUtilities struct{}
 
-func (ex FakeExternal) GetTimestamp() int64 {
+func (ex FakeUtilities) GetTimestamp() int64 {
 	return 149134571
 }
 
 func TestStore_AddMessage_GetUsers(t *testing.T) {
 	s := Store{
-		Utils: FakeExternal{},
+		Utils: FakeUtilities{},
 		Users: make(map[Username]bool),
 	}
 	m := &Message{
@@ -32,7 +32,7 @@ func TestStore_AddMessage_GetUsers(t *testing.T) {
 	assert.Equal(t, s.Messages[0], expected)
 	assert.Equal(t, len(s.Messages), 1)
 
-	actual = s.AddMessage(&Message{
+	s.AddMessage(&Message{
 		User: "batman",
 		Text: "hello",
 	})
@@ -56,7 +56,7 @@ func TestStore_GetMessages(t *testing.T) {
 		messages = append(messages, m)
 	}
 	s := Store{
-		Utils: FakeExternal{},
+		Utils: FakeUtilities{},
 		Users: make(map[Username]bool),
 		MessageList: MessageList{
 			Messages: messages,

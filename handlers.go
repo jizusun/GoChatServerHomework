@@ -15,17 +15,34 @@ func ReadMessage(w http.ResponseWriter, r *http.Request, s *Store) {
 	results := MessageList{
 		Messages: s.Messages,
 	}
-	output, err := json.MarshalIndent(&results, "", "  ")
+	w.Header().Set("Content-Type", "application/json")
+	output, _ := json.MarshalIndent(&results, "", "  ")
+	_, err := w.Write(output)
 	if err != nil {
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(output)
 }
 
 func ReadMessageHandler(s *Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ReadMessage(w, r, s)
+	}
+}
+
+type UserList struct {
+	Users []Username `json:"users"`
+}
+
+func GetUsers(w http.ResponseWriter, r *http.Request, s *Store) {
+	users := s.GetUsers()
+	res := UserList{
+		Users: users,
+	}
+	w.Header().Set("Content-Type", "application/json")
+	output, _ := json.MarshalIndent(&res, "", "  ")
+	_, err := w.Write(output)
+	if err != nil {
+		return
 	}
 }
 
@@ -37,9 +54,15 @@ func CreateMessage(w http.ResponseWriter, r *http.Request, s *Store) {
 	}
 	s.AddMessage(&m)
 	res := CreationSuccess{Ok: true}
-	enc := json.NewEncoder(w)
-	enc.SetIndent("", "  ")
-	enc.Encode(res)
+	w.Header().Set("Content-Type", "application/json")
+	output, _ := json.MarshalIndent(&res, "", "  ")
+	_, err = w.Write(output)
+	if err != nil {
+		return
+	}
+	// enc := json.NewEncoder(w)
+	// enc.SetIndent("", "  ")
+	// enc.Encode(res)
 }
 
 func CreateMessageHandler(s *Store) http.HandlerFunc {
@@ -48,7 +71,17 @@ func CreateMessageHandler(s *Store) http.HandlerFunc {
 	}
 }
 
+func GetUsersHandler(s *Store) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		GetUsers(w, r, s)
+	}
+}
+
 // StatusHandler test
 func StatusHandler(c http.ResponseWriter, req *http.Request) {
-	c.Write([]byte("alive"))
+	output := []byte("alive")
+	_, err := c.Write(output)
+	if err != nil {
+		return
+	}
 }

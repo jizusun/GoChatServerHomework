@@ -4,6 +4,9 @@ build:
 test:
 	go test
 
+dev:
+	go run .
+
 run:
 	./chatserver
 

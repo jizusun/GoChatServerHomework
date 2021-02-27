@@ -18,7 +18,7 @@ import (
 
 func TestMessageCreateHandler(t *testing.T) {
 	store := &Store{
-		Utils: External{},
+		Utils: Utilities{},
 		Users: make(map[string]bool),
 	}
 	jsonStr := []byte(`{"user":"superman", "text":"hello"}`)
@@ -31,8 +31,7 @@ func TestMessageCreateHandler(t *testing.T) {
 
 	expectedCreateRes := `{
   "ok": true
-}
-`
+}`
 	actualCreateRes := rec.Body.String()
 	assert.Equal(t, expectedCreateRes, actualCreateRes)
 }
@@ -49,7 +48,7 @@ func TestMessageReadHandler(t *testing.T) {
 		Timestamp: int64(1491345713),
 	}
 	store := &Store{
-		Utils: External{},
+		Utils: Utilities{},
 		Users: make(map[string]bool),
 		MessageList: MessageList{
 			Messages: []*Message{&message1, &message2},
@@ -62,15 +61,43 @@ func TestMessageReadHandler(t *testing.T) {
 	mux.ServeHTTP(rec, req)
 
 	actualReadRes := rec.Body.String()
-	expectedReadRes := `
-{
-  "messages: [
-    {"timestamp": 1491345710, "user": "superman", "text": "hello"},
-    {"timestamp": 1491345713, "user": "batman", "text": "hello"}
+	expectedReadRes := `{
+  "messages": [
+    {
+      "timestamp": 1491345710,
+      "user": "superman",
+      "text": "hello"
+    },
+    {
+      "timestamp": 1491345713,
+      "user": "batman",
+      "text": "hello"
+    }
   ]
-}
-`
+}`
 	assert.Equal(t, expectedReadRes, actualReadRes)
+
+}
+
+func TestGetUserHandler(t *testing.T) {
+	store := &Store{
+		Users: map[string]bool{"superman": true, "batman": true},
+	}
+	req, _ := http.NewRequest("GET", "/users", nil)
+	rec := httptest.NewRecorder()
+	mux := http.NewServeMux()
+	mux.HandleFunc("/users", GetUsersHandler(store))
+	mux.ServeHTTP(rec, req)
+
+	actualUsers := rec.Body.String()
+	expectedUsers := `{
+  "users": [
+    "superman",
+    "batman"
+  ]
+}`
+
+	assert.Equal(t, expectedUsers, actualUsers)
 }
 
 func TestStatusHandler(t *testing.T) {
