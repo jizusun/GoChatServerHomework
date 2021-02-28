@@ -1,5 +1,7 @@
 # GoChatServer
 
+[![codecov](https://codecov.io/gh/jizusun/GoChatServerHomework/branch/main/graph/badge.svg?token=UB5E9NIZ68)](https://codecov.io/gh/jizusun/GoChatServerHomework)
+
 The goal of the exercise is to implement a chat server. 
 The chat server will run on http://localhost:8081 and will support the following REST API: 
 
