@@ -1,5 +1,3 @@
-chatserver
-
 # MacOS DS_Store files
 .DS_Store
 
@@ -40,3 +38,6 @@ dist/
 # env files that usually contain secrets or local config
 .env
 .envrc
+
+
+chatserver

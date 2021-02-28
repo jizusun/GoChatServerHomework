@@ -1,7 +1,5 @@
 {
     "editor.formatOnSave": true,
-    // Specifies Lint tool name.
-    "go.lintTool": "golint",
     "go.lintOnSave": "file",
     "go.testOnSave": true,
     "go.coverOnSave": true,
@@ -13,4 +11,26 @@
         "uncoveredGutterStyle": "blockred"
     },
     "files.autoSave": "onFocusChange",
+    // gopls with gofumpt and import ordering
+    "go.useLanguageServer": true,
+    "gopls": {
+        "gofumpt": true,
+    },
+    "[go]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true,
+        },
+    },
+    "[go.mod]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true,
+        },
+    },
+    // golangci-lint  
+    "go.lintTool": "golangci-lint",
+    "go.lintFlags": [
+        "--fast"
+    ]
 }
