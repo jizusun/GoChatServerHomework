@@ -14,7 +14,7 @@ func (ex FakeUtilities) GetTimestamp() int64 {
 }
 
 func TestStore_AddMessage_GetUsers(t *testing.T) {
-	s := Store{
+	s := messageStore{
 		Utils: FakeUtilities{},
 	}
 	m := &Message{
@@ -26,22 +26,22 @@ func TestStore_AddMessage_GetUsers(t *testing.T) {
 		Text:      "hello",
 		Timestamp: 149134571,
 	}
-	actual := s.AddMessage(m)
+	actual := s.addMessage(m)
 	assert.Equal(t, expected, actual)
 	assert.Equal(t, s.Messages[0], expected)
 	assert.Equal(t, len(s.Messages), 1)
 
-	s.AddMessage(&Message{
+	s.addMessage(&Message{
 		User: "batman",
 		Text: "hello",
 	})
-	s.AddMessage(&Message{
+	s.addMessage(&Message{
 		User: "batman",
 		Text: "hello world",
 	})
-	actualUsers := s.GetUsers()
+	actualUsers := s.getUsers()
 
-	assert.Equal(t, actualUsers, []Username{"superman", "batman"})
+	assert.Equal(t, actualUsers, []username{"superman", "batman"})
 }
 
 func TestStore_GetMessages(t *testing.T) {
@@ -56,13 +56,13 @@ func TestStore_GetMessages(t *testing.T) {
 		}
 		messages = append(messages, m)
 	}
-	s := Store{
+	s := messageStore{
 		Utils: FakeUtilities{},
-		MessageList: MessageList{
+		messageList: messageList{
 			Messages: messages,
 		},
 	}
-	actual := s.GetMessages()
+	actual := s.getMessages()
 	lastMessage := messages[size-1]
 	assert.Equal(t, len(messages), size)
 	assert.Equal(t, len(actual), 100)

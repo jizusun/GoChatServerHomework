@@ -1,15 +1,16 @@
+// Author: Jizu Sun
 package main
 
 import (
 	"time"
 )
 
-type UtilitiesInterface interface {
+type utilitiesInterface interface {
 	GetTimestamp() int64
 }
 
-type Utilities struct{}
+type utilities struct{}
 
-func (ex Utilities) GetTimestamp() int64 {
+func (ex utilities) GetTimestamp() int64 {
 	return time.Now().Unix()
 }

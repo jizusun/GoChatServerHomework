@@ -1,44 +1,44 @@
+// Author: Jizu Sun
 package main
 
 // Message the message is processed by the server a unix timestamp is recorded with each message.
 type Message struct {
 	Timestamp int64    `json:"timestamp"`
-	User      Username `json:"user"`
+	User      username `json:"user"`
 	Text      string   `json:"text"`
 }
 
-type Username = string
+type username = string
 
-type MessageList struct {
+type messageList struct {
 	Messages []*Message `json:"messages"`
 }
 
-// Store the response of reading messages
-type Store struct {
-	MessageList
-	Utils UtilitiesInterface
+type messageStore struct {
+	messageList
+	Utils utilitiesInterface
 }
 
-func (s *Store) AddMessage(m *Message) *Message {
+func (s *messageStore) addMessage(m *Message) *Message {
 	m.Timestamp = s.Utils.GetTimestamp()
 	s.Messages = append(s.Messages, m)
 	return m
 }
 
-func (s *Store) GetMessages() []*Message {
+func (s *messageStore) getMessages() []*Message {
 	size := len(s.Messages)
 	return s.Messages[size-100:]
 }
 
-func (s *Store) GetUsers() []Username {
-	users := make([]Username, 0)
-	usersmap := make(map[Username]bool)
+func (s *messageStore) getUsers() []username {
+	users := make([]username, 0)
+	usersmap := make(map[username]bool)
 	for _, m := range s.Messages {
-		username := m.User
-		_, ok := usersmap[username]
+		name := m.User
+		_, ok := usersmap[name]
 		if !ok {
-			usersmap[username] = true
-			users = append(users, username)
+			usersmap[name] = true
+			users = append(users, name)
 		}
 	}
 	return users

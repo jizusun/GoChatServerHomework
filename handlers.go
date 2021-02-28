@@ -1,3 +1,4 @@
+// Author: Jizu Sun (sunjizu@gmail.com)
 package main
 
 import (
@@ -5,80 +6,78 @@ import (
 	"net/http"
 )
 
-// CreationSuccess the response for `POST` `/message`
-type CreationSuccess struct {
+type creationSuccess struct {
 	Ok bool `json:"ok"`
 }
 
-// ReadMessage read the last 100 messages, sorted ascending by timestamp
-func ReadMessage(w http.ResponseWriter, r *http.Request, s *Store) {
-	results := MessageList{
+func readMessage(w http.ResponseWriter, _ *http.Request, s *messageStore) {
+	results := messageList{
 		Messages: s.Messages,
 	}
+
 	w.Header().Set("Content-Type", "application/json")
+
 	output, _ := json.MarshalIndent(&results, "", "  ")
-	_, err := w.Write(output)
-	if err != nil {
+	if _, err := w.Write(output); err != nil {
 		return
 	}
 }
 
-func ReadMessageHandler(s *Store) http.HandlerFunc {
+func readMessageHandler(s *messageStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ReadMessage(w, r, s)
+		readMessage(w, r, s)
 	}
 }
 
-type UserList struct {
-	Users []Username `json:"users"`
+type userList struct {
+	Users []username `json:"users"`
 }
 
-func GetUsers(w http.ResponseWriter, r *http.Request, s *Store) {
-	users := s.GetUsers()
-	res := UserList{
+func getUsers(w http.ResponseWriter, _ *http.Request, s *messageStore) {
+	users := s.getUsers()
+	res := userList{
 		Users: users,
 	}
+
 	w.Header().Set("Content-Type", "application/json")
+
 	output, _ := json.MarshalIndent(&res, "", "  ")
-	_, err := w.Write(output)
-	if err != nil {
+	if _, err := w.Write(output); err != nil {
 		return
 	}
 }
 
-func CreateMessage(w http.ResponseWriter, r *http.Request, s *Store) {
+func createMessage(w http.ResponseWriter, r *http.Request, s *messageStore) {
 	var m Message
-	err := json.NewDecoder(r.Body).Decode(&m)
-	if err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&m); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
-	s.AddMessage(&m)
-	res := CreationSuccess{Ok: true}
+
+	s.addMessage(&m)
+
+	res := creationSuccess{Ok: true}
+
 	w.Header().Set("Content-Type", "application/json")
+
 	output, _ := json.MarshalIndent(&res, "", "  ")
-	_, err = w.Write(output)
-	if err != nil {
+	if _, err := w.Write(output); err != nil {
 		return
 	}
-	// enc := json.NewEncoder(w)
-	// enc.SetIndent("", "  ")
-	// enc.Encode(res)
 }
 
-func CreateMessageHandler(s *Store) http.HandlerFunc {
+func createMessageHandler(s *messageStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		CreateMessage(w, r, s)
+		createMessage(w, r, s)
 	}
 }
 
-func GetUsersHandler(s *Store) http.HandlerFunc {
+func getUsersHandler(s *messageStore) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		GetUsers(w, r, s)
+		getUsers(w, r, s)
 	}
 }
 
-// StatusHandler test
-func StatusHandler(c http.ResponseWriter, req *http.Request) {
+func statusHandler(c http.ResponseWriter, req *http.Request) {
 	output := []byte("alive")
 	_, err := c.Write(output)
 	if err != nil {

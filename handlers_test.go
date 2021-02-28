@@ -17,15 +17,15 @@ import (
 // should record a unix timestamp with each message
 
 func TestMessageCreateHandler(t *testing.T) {
-	store := &Store{
-		Utils: Utilities{},
+	store := &messageStore{
+		Utils: utilities{},
 	}
 	jsonStr := []byte(`{"user":"superman", "text":"hello"}`)
 	req, _ := http.NewRequest("POST", "/message", bytes.NewBuffer(jsonStr))
 	rec := httptest.NewRecorder()
 	mux := http.NewServeMux()
-	mux.HandleFunc("/message", CreateMessageHandler(store))
-	mux.HandleFunc("/messages", ReadMessageHandler(store))
+	mux.HandleFunc("/message", createMessageHandler(store))
+	mux.HandleFunc("/messages", readMessageHandler(store))
 	mux.ServeHTTP(rec, req)
 
 	expectedCreateRes := `{
@@ -46,16 +46,16 @@ func TestMessageReadHandler(t *testing.T) {
 		Text:      "hello",
 		Timestamp: int64(1491345713),
 	}
-	store := &Store{
-		Utils: Utilities{},
-		MessageList: MessageList{
+	store := &messageStore{
+		Utils: utilities{},
+		messageList: messageList{
 			Messages: []*Message{&message1, &message2},
 		},
 	}
 	req, _ := http.NewRequest("GET", "/messages", nil)
 	rec := httptest.NewRecorder()
 	mux := http.NewServeMux()
-	mux.HandleFunc("/messages", ReadMessageHandler(store))
+	mux.HandleFunc("/messages", readMessageHandler(store))
 	mux.ServeHTTP(rec, req)
 
 	actualReadRes := rec.Body.String()
@@ -74,7 +74,6 @@ func TestMessageReadHandler(t *testing.T) {
   ]
 }`
 	assert.Equal(t, expectedReadRes, actualReadRes)
-
 }
 
 func TestGetUserHandler(t *testing.T) {
@@ -88,16 +87,16 @@ func TestGetUserHandler(t *testing.T) {
 		Text:      "hello",
 		Timestamp: int64(1491345713),
 	}
-	store := &Store{
-		Utils: Utilities{},
-		MessageList: MessageList{
+	store := &messageStore{
+		Utils: utilities{},
+		messageList: messageList{
 			Messages: []*Message{&message1, &message2},
 		},
 	}
 	req, _ := http.NewRequest("GET", "/users", nil)
 	rec := httptest.NewRecorder()
 	mux := http.NewServeMux()
-	mux.HandleFunc("/users", GetUsersHandler(store))
+	mux.HandleFunc("/users", getUsersHandler(store))
 	mux.ServeHTTP(rec, req)
 
 	actualUsers := rec.Body.String()
@@ -116,9 +115,11 @@ func TestStatusHandler(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(StatusHandler)
+	handler := http.HandlerFunc(statusHandler)
 	handler.ServeHTTP(rr, req)
+
 	expected := "alive"
 	if rr.Body.String() != expected {
 		t.Errorf("handler returned unexpected body: got %v want %v",

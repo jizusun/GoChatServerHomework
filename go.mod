@@ -1,4 +1,4 @@
-module github.com/jizusun/GoChatServer
+module github.com/jizusun/GoChatServerHomework
 
 go 1.14
 
