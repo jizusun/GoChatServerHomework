@@ -1,5 +1,6 @@
 # GoChatServer
 
+[![build](https://github.com/jizusun/GoChatServerHomework/actions/workflows/build.yml/badge.svg)](https://github.com/jizusun/GoChatServerHomework/actions/workflows/build.yml)
 [![codecov](https://codecov.io/gh/jizusun/GoChatServerHomework/branch/main/graph/badge.svg?token=UB5E9NIZ68)](https://codecov.io/gh/jizusun/GoChatServerHomework)
 
 The goal of the exercise is to implement a chat server. 
