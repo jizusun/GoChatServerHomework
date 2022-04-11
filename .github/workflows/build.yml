@@ -36,12 +36,12 @@ jobs:
       - name: Build
         run: make ci -f github-actions.mak
       - name: Upload coverage
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: coverage
           path: coverage.*
       - name: Upload dist
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: dist
           path: dist
